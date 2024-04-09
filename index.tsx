@@ -367,6 +367,7 @@ const createMenuItems = (items: (string | string[])[]) => {
         </Menu.MenuItem>
       );
 
+      //Checks if authentic display is off, then makes a starting button, so it can be selectable.
       if (!settings.store.authenticDisplay) {
         const selectableItemMenuItem = (
           <Menu.MenuItem
@@ -377,6 +378,7 @@ const createMenuItems = (items: (string | string[])[]) => {
           />
         );
 
+        //Adds the message at the start of the array.
         categoryMenuItem.props.children.unshift(selectableItemMenuItem);
       }
 
@@ -395,8 +397,8 @@ const createMenuItems = (items: (string | string[])[]) => {
 };
 
 
-
-const messagePatch: NavContextMenuPatchCallback = (children, { message }) => () => {
+//Patches so you can do safechat from right clicking messages, and from the navigation button.
+const messagePatch: NavContextMenuPatchCallback = (children, { message }) => {
   if (!message.content) return;
 
   children.push(
@@ -409,7 +411,7 @@ const messagePatch: NavContextMenuPatchCallback = (children, { message }) => () 
   );
 };
 
-const navigationPatch: NavContextMenuPatchCallback = (children, props) => () => {
+const navigationPatch: NavContextMenuPatchCallback = (children, props) => {
   children.push(
     <Menu.MenuItem
       id="SafechatMenu"
@@ -441,6 +443,7 @@ export default definePlugin({
   }
 });
 
+//Sends the selected safechat message, to the channel.
 async function sendSafechatMessage(text) {
   const currentChannel = Vencord.Webpack.findByProps('getCurrentlySelectedChannelId').getCurrentlySelectedChannelId()
   Vencord.Webpack.findByProps('_sendMessage').sendMessage(currentChannel, { content: text, invalidEmojis: [], validNonShortcutEmojis: [] })
