@@ -351,6 +351,8 @@ import { addContextMenuPatch, findGroupChildrenByChildId, NavContextMenuPatchCal
 import definePlugin from "@utils/types";
 import { Menu, PermissionsBits, PermissionStore } from "@webpack/common";
 import { settings } from "./settings";
+import { findByPropsLazy, findStoreLazy } from "@webpack";
+const OptionClasses = findByPropsLazy("optionName", "optionIcon", "optionLabel");
 
 const createMenuItems = (items: (string | string[])[]) => {
   return items.map((item, index) => {
@@ -400,26 +402,60 @@ const createMenuItems = (items: (string | string[])[]) => {
 //Patches so you can do safechat from right clicking messages, and from the navigation button.
 const messagePatch: NavContextMenuPatchCallback = (children, { message }) => {
   if (!message.content) return;
+  let safechatIcon = settings.store.safechatIcon
 
-  children.push(
-    <Menu.MenuItem
-      id="SafechatMenu"
-      label="Safechat"
-    >
-      {createMenuItems(messages)}
-    </Menu.MenuItem>
-  );
+  if (safechatIcon == null || safechatIcon == "") {
+    children.push(
+      <Menu.MenuItem
+        id="SafechatMenu"
+        label="Safechat"
+      >
+        {createMenuItems(messages)}
+      </Menu.MenuItem>
+    );
+  } else {
+    children.push(
+      <Menu.MenuItem
+        id="SafechatMenu"
+        label={
+          <div className={OptionClasses.optionLabel}>
+            <img src={safechatIcon} height='24px' width='24px'></img>
+            <div className={OptionClasses.optionName}>Safechat</div>
+          </div>
+        }
+      >
+        {createMenuItems(messages)}
+      </Menu.MenuItem>
+    );
+  }
 };
 
 const navigationPatch: NavContextMenuPatchCallback = (children, props) => {
-  children.push(
-    <Menu.MenuItem
-      id="SafechatMenu"
-      label="Safechat"
-    >
-      {createMenuItems(messages)}
-    </Menu.MenuItem>
-  );
+  let safechatIcon = settings.store.safechatIcon
+  if (safechatIcon == null || safechatIcon == "") {
+    children.push(
+      <Menu.MenuItem
+        id="SafechatMenu"
+        label="Safechat"
+      >
+        {createMenuItems(messages)}
+      </Menu.MenuItem>
+    );
+  } else {
+    children.push(
+      <Menu.MenuItem
+        id="SafechatMenu"
+        label={
+          <div className={OptionClasses.optionLabel}>
+            <img src={safechatIcon} height='24px' width='24px'></img>
+            <div className={OptionClasses.optionName}>Safechat</div>
+          </div>
+        }
+      >
+        {createMenuItems(messages)}
+      </Menu.MenuItem>
+    );
+  }
 };
 
 export default definePlugin({
