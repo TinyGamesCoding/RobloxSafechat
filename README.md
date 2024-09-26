@@ -1,5 +1,5 @@
 # Roblox Safechat
- A vencord extension that adds Roblox's Safe Chat.
+A Vencord extension that adds Roblox's old Safechat feature.
 
 ## Installation Instructions
 - Follow the vencord [plugin guide](https://github.com/Vendicated/Vencord/blob/main/docs/1_INSTALLING.md) if you havent already.
